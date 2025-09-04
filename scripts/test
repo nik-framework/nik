@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Activate venv if exists
+if [ -d "venv" ]; then
+  source venv/bin/activate
+fi
+
+# Run pytest with options
+pytest $@

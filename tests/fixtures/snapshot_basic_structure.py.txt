@@ -1,0 +1,58 @@
+# type: ignore
+# ruff: noqa: F401, I001
+
+# This file is auto-generated, do not edit it directly.
+
+from app.routes.layout import layout as app_routes_layout_layout
+from app.routes.route import view as app_routes_route_view
+from app.routes.users._user_id_.route import view as app_routes_users__user_id__route_view
+from app.routes.users.route import view as app_routes_users_route_view
+from nik.server.authentication.session import Session
+from nik.server.cookies import Cookies
+from nik.server.routes.router import Route, RouteComponent, RouteComponentParam
+from nik.views.context import Page
+from nik.views.elements import Children
+import re
+
+
+# RouteComponent definitions
+_rc_app_routes_layout_layout = RouteComponent(
+    app_routes_layout_layout,
+    [RouteComponentParam("children", Children)], is_async=False, is_root=True,
+)
+_rc_app_routes_route_view = RouteComponent(
+    app_routes_route_view,
+    [], is_async=False,
+)
+_rc_app_routes_users_route_view = RouteComponent(
+    app_routes_users_route_view,
+    [], is_async=False,
+)
+_rc_app_routes_users__user_id__route_view = RouteComponent(
+    app_routes_users__user_id__route_view,
+    [RouteComponentParam("user_id", int)], is_async=True,
+)
+
+
+_NONE_DYNAMIC_ROUTES = {
+    "/": Route(
+        "/", [_rc_app_routes_layout_layout, _rc_app_routes_route_view], action=None, permissions=None
+    ),
+    "/users": Route(
+        "/users", [_rc_app_routes_layout_layout, _rc_app_routes_users_route_view], action=None, permissions=None
+    ),
+}
+
+
+_DYNAMIC_ROUTES = (
+    (
+        re.compile(r"^/users/(?P<user_id>[^/]+)$"),
+        Route(
+            "/users/_user_id_",
+            [_rc_app_routes_layout_layout, _rc_app_routes_users__user_id__route_view], action=None, permissions=None,
+        ),
+    ),
+)
+
+
+ROUTES = (_NONE_DYNAMIC_ROUTES, _DYNAMIC_ROUTES)

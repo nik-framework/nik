@@ -1,0 +1,49 @@
+# type: ignore
+# ruff: noqa: F401, I001
+
+# This file is auto-generated, do not edit it directly.
+
+from app.routes.admin.route import view as app_routes_admin_route_view
+from app.routes.admin.settings.route import view as app_routes_admin_settings_route_view
+from app.routes.route import view as app_routes_route_view
+from nik.server.authentication.session import Session
+from nik.server.cookies import Cookies
+from nik.server.routes.router import Route, RouteComponent, RouteComponentParam
+from nik.views.context import Page
+from nik.views.elements import Children
+import re
+
+
+# RouteComponent definitions
+_rc_app_routes_route_view = RouteComponent(
+    app_routes_route_view,
+    [], is_async=False,
+)
+_rc_app_routes_admin_route_view = RouteComponent(
+    app_routes_admin_route_view,
+    [], is_async=False,
+)
+_rc_app_routes_admin_settings_route_view = RouteComponent(
+    app_routes_admin_settings_route_view,
+    [], is_async=False,
+)
+
+
+_NONE_DYNAMIC_ROUTES = {
+    "/": Route(
+        "/", [_rc_app_routes_route_view], action=None, permissions={'role': 'user'}
+    ),
+    "/admin": Route(
+        "/admin", [_rc_app_routes_admin_route_view], action=None, permissions={'role': 'admin'}
+    ),
+    "/admin/settings": Route(
+        "/admin/settings", [_rc_app_routes_admin_settings_route_view], action=None, permissions=None
+    ),
+}
+
+
+_DYNAMIC_ROUTES = (
+)
+
+
+ROUTES = (_NONE_DYNAMIC_ROUTES, _DYNAMIC_ROUTES)

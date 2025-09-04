@@ -1,0 +1,42 @@
+# type: ignore
+# ruff: noqa: F401, I001
+
+# This file is auto-generated, do not edit it directly.
+
+from app.routes.form.route import action as app_routes_form_route_action
+from app.routes.form.route import partial as app_routes_form_route_partial
+from app.routes.form.route import view as app_routes_form_route_view
+from nik.server.authentication.session import Session
+from nik.server.cookies import Cookies
+from nik.server.routes.router import Route, RouteComponent, RouteComponentParam
+from nik.views.context import Page
+from nik.views.elements import Children
+import re
+
+
+# RouteComponent definitions
+_rc_app_routes_form_route_view = RouteComponent(
+    app_routes_form_route_view,
+    [], is_async=False,
+)
+_rc_app_routes_form_route_partial = RouteComponent(
+    app_routes_form_route_partial,
+    [], is_async=False,
+)
+_rc_app_routes_form_route_action = RouteComponent(
+    app_routes_form_route_action,
+    [], is_async=False,
+)
+
+
+_NONE_DYNAMIC_ROUTES = {
+    "/form": Route(
+        "/form", [_rc_app_routes_form_route_view, _rc_app_routes_form_route_partial], action=_rc_app_routes_form_route_action, permissions=None
+    ),
+}
+
+
+_DYNAMIC_ROUTES = (
+)
+
+ROUTES = (_NONE_DYNAMIC_ROUTES, _DYNAMIC_ROUTES)

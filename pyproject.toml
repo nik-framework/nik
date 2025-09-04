@@ -1,0 +1,80 @@
+[project]
+name = "nik"
+version = "0.1.0"
+description = "Build single page web applications using only Python."
+readme = "README.md"
+authors = [{ name = "Ismail Asci", email = "ismail.asci@gmail.com" }]
+requires-python = ">=3.10"
+classifiers = [
+    "Private :: Do Not Upload",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/nik-framework/nik"
+Documentation = "https://github.com/nik-framework/nik"
+Changelog = "https://github.com/nik-framework/nik"
+Funding = "https://github.com/nik-framework/nik"
+Source = "https://github.com/nik-framework/nik"
+
+[build-system]
+requires = ["uv_build>=0.8.12,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.404",
+    "ruff>=0.12.9",
+]
+
+tests = [
+    "asgi-lifespan>=2.1.0",
+    "httpx>=0.28.1",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+    "pytest-cov>=6.2.1",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.ruff]
+src = ["src"]
+fix = true
+show-fixes = true
+output-format = "full"
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "B",
+    "C4",
+    "E",
+    "F",
+    "FA",
+    "I",
+    "Q",
+    "RUF100",
+    "UP",
+    "YTT",
+]
+ignore=[
+    "UP038", # deprecated rule
+]
+
+[tool.ruff.lint.isort]
+known-third-party = ["nik"]
+combine-as-imports = true
+
+[tool.pyright]
+pythonVersion = "3.10"
+include = ["src", "tests"]
+
+[tool.uv]
+default-groups = ["dev", "tests"]
+
+[tool.coverage.report]
+exclude_also = [
+    "raise NotImplementedError",
+]
