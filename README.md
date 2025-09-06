@@ -93,7 +93,7 @@ curl http://127.0.0.1:8000
 <fragment id="v_Sq_72h">
   <div>Hello, world!</div>
   <script>
-    window.__nik.run({ v_Sq_72h: null });
+    window.__nik__.run({ v_Sq_72h: null });
   </script>
 </fragment>
 ```

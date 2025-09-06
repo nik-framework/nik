@@ -85,7 +85,7 @@ class ViewRenderer(BaseRenderer):
                 cookies=self.context.request.cookies,
             )
         else:
-            final_view.add_child(Script(children=[f"window.__nik.run({to_json(actions)});"]))
+            final_view.add_child(Script(children=[f"window.__nik__.run({to_json(actions)});"]))
             return Response.html(
                 final_view.render(),
                 cookies=self.context.request.cookies,

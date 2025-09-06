@@ -258,10 +258,6 @@
       throw new Error(`Callback "${callbackName}" does not exist.`);
     }
     return (...args) => {
-      console.log(
-        `Callback "${callbackName}" is being called with arguments:`,
-        args
-      );
       return callback(...args);
     };
   }
@@ -313,13 +309,6 @@
       const element = getElementById(elementId);
 
       let result = observable[op](op_value, observableProp);
-      console.log("result", {
-        result,
-        observableProp,
-        value: observable._value[observableProp],
-        op,
-        op_value,
-      });
       if (result) {
         element.classList.add(className);
       } else {
@@ -357,10 +346,6 @@
         form.classList.remove(loadingClass);
         form.classList.remove(errorClass);
       }
-    },
-
-    consoleLog: (message) => {
-      console.log("ConsoleLog:", message);
     },
 
     /**
@@ -495,12 +480,6 @@
         const callback = getCallback(callbackName);
 
         observable.subscribe((oldValue, newValue, prop, operation) => {
-          console.log(`${observableKey}.${observableProp} changed.`, {
-            oldValue,
-            newValue,
-            prop,
-            operation,
-          });
           return callback(...callbackArgs, {
             observable,
             observableProp,
@@ -518,15 +497,6 @@
         }
 
         this.page.onClickSubscriptions[elmId].push(async (elm_id) => {
-          console.log(
-            "OnClick event triggered for:",
-            elm_id,
-            "with callback:",
-            callbackName,
-            "and args:",
-            callbackArgs
-          );
-
           const callback = getCallback(callbackName);
           callback(...callbackArgs, { app: this });
         });
@@ -536,7 +506,7 @@
         this.page.onSubmitSubscriptions[formId] = async (event) => {
           event.preventDefault();
 
-          const formState = this.getObservable(formId + "_form_state", false);
+          const formState = this.getObservable(formId + "_form_state", null);
           const updateFormState = (value) => {
             if (formState) {
               formState.update(value);
@@ -643,7 +613,7 @@
             }
 
             if (json && json.actions) {
-              this.init(json.actions);
+              this.run(json.actions);
             }
             this.page.loading.update(false);
           } catch (error) {
@@ -673,11 +643,6 @@
           if (elm.type === "checkbox" || elm.type === "radio") {
             elm.checked = value;
           } else {
-            console.log("element value should change", {
-              elmId,
-              observableKey,
-              value,
-            });
             elm.value = value;
           }
         });
@@ -696,7 +661,6 @@
 
       redirect: (url, full = true) => {
         debounce(() => {
-          console.log("Redirecting to:", url);
           if (full) {
             window.location.href = url;
           } else {
@@ -710,9 +674,7 @@
       },
     };
 
-    init(actions) {
-      console.log(JSON.stringify(actions, null, 2));
-
+    run(actions) {
       for (const viewActions of Object.values(actions)) {
         if (Array.isArray(viewActions)) {
           for (const [actionName, ...actionGroups] of viewActions) {
@@ -720,12 +682,6 @@
             if (method) {
               actionGroups.forEach((params) => {
                 try {
-                  console.log(
-                    "Calling action:",
-                    actionName,
-                    "with params:",
-                    params
-                  );
                   method.apply(this, params);
                 } catch (error) {
                   console.error(
@@ -747,19 +703,19 @@
 
     /**
      * @param {String} observableKey
-     * @param {$this} NikApp
+     * @param {any} defaultVal Value to return if the observable does not exist. If not given an error will be thrown.
      * @returns {Observable|null}
-     * @throws {Error} If the observable does not exist
+     * @throws {Error} If the observable does not exist and no default value is provided
      */
-    getObservable = (observableKey, throwError = true) => {
+    getObservable = (observableKey, defaultVal) => {
       const observable = this.page.observables[observableKey];
-      if (!observable) {
-        if (throwError) {
-          throw new Error(
-            `Observable with key "${observableKey}" does not exist.`
-          );
+      if (observable === undefined) {
+        if (defaultVal !== undefined) {
+          return defaultVal;
         }
-        return null;
+        throw new Error(
+          `Observable with key "${observableKey}" does not exist.`
+        );
       }
       return observable;
     };
@@ -821,12 +777,14 @@
 
             this.currentPath = newPath;
 
-            const navState = this.getObservable("page_nav_state");
-            navState.update(newPath);
+            const navState = this.getObservable("page_nav_state", null);
+            if (navState) {
+              navState.update(newPath);
+            }
           }
 
           if (json.actions) {
-            this.init(json.actions);
+            this.run(json.actions);
           }
 
           if (pushState) {
@@ -854,11 +812,6 @@
         if (id && this.page.onClickSubscriptions[id]) {
           e.preventDefault();
           this.triggerOnClick(id);
-        } else {
-          console.log("Click event not handled:", {
-            tagName: e.target.tagName,
-            id: e.target.id,
-          });
         }
       }
     };
