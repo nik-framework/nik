@@ -1,5 +1,5 @@
 # type: ignore
-# ruff: noqa: F401, I001
+# ruff: noqa: E501, F401, I001, Q000
 
 # This file is auto-generated, do not edit it directly.
 

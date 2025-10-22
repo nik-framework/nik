@@ -307,7 +307,8 @@ def generate_routes(project_root_path: str):
 
     output = [
         "# type: ignore",
-        "# ruff: noqa: F401, I001",
+        # Q000 is temporary, will be removed in future versions.
+        "# ruff: noqa: E501, F401, I001, Q000",
         "",
         "# This file is auto-generated, do not edit it directly.",
         "",
