@@ -3,6 +3,8 @@
 
 # This file is auto-generated, do not edit it directly.
 
+from app.routes.blocking.route import action as app_routes_blocking_route_action
+from app.routes.blocking.route import view as app_routes_blocking_route_view
 from app.routes.doctors.login.route import action as app_routes_doctors_login_route_action
 from app.routes.doctors.login.route import view as app_routes_doctors_login_route_view
 from app.routes.doctors.patients._patient_id_.appointments._appointment_id_.route import action as app_routes_doctors_patients__patient_id__appointments__appointment_id__route_action
@@ -35,6 +37,14 @@ _rc_app_routes_route_view = RouteComponent(
 _rc_app_routes_route_action = RouteComponent(
     app_routes_route_action,
     [], is_async=True,
+)
+_rc_app_routes_blocking_route_view = RouteComponent(
+    app_routes_blocking_route_view,
+    [], is_async=False,
+)
+_rc_app_routes_blocking_route_action = RouteComponent(
+    app_routes_blocking_route_action,
+    [], is_async=False,
 )
 _rc_app_routes_doctors_login_route_view = RouteComponent(
     app_routes_doctors_login_route_view,
@@ -77,6 +87,9 @@ _rc_app_routes_patients_dashboard_route_view = RouteComponent(
 _NONE_DYNAMIC_ROUTES = {
     "/": Route(
         "/", [_rc_app_routes_layout_layout, _rc_app_routes_route_view], action=_rc_app_routes_route_action, permissions=None
+    ),
+    "/blocking": Route(
+        "/blocking", [_rc_app_routes_layout_layout, _rc_app_routes_blocking_route_view], action=_rc_app_routes_blocking_route_action, permissions=None
     ),
     "/doctors/login": Route(
         "/doctors/login", [_rc_app_routes_layout_layout, _rc_app_routes_doctors_login_route_view], action=_rc_app_routes_doctors_login_route_action, permissions=None

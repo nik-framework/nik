@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from ...utils.asyncio import run_sync_in_thread
 from ...utils.string import to_json
 from ...views.context import ViewContext
 from ...views.elements import Fragment, HtmlElement, Script
@@ -149,10 +150,11 @@ class ViewRenderer(BaseRenderer):
                 route_args=route_args,
             )
 
+            # Execute view function. If it's sync, run in thread to avoid blocking loop.
             if route_component.is_async:
-                result = await route_component.func(**view_func_kwargs)  # type: ignore
+                result = await route_component.func(**view_func_kwargs)  # type: ignore[arg-type]
             else:
-                result = route_component.func(**view_func_kwargs)
+                result = await run_sync_in_thread(route_component.func, **view_func_kwargs)  # type: ignore[arg-type]
                 assert isinstance(result, HtmlElement), "Views must return an HtmlElement"
 
             actions[str(route_component.id)] = ctx.get_actions()
@@ -193,10 +195,11 @@ class ActionRenderer(BaseRenderer):
             )
 
             try:
+                # Execute action function. If it's sync, run in thread to avoid blocking loop.
                 if matched_route.route.action.is_async:
-                    result = await matched_route.route.action.func(**view_func_kwargs)  # type: ignore
+                    result = await matched_route.route.action.func(**view_func_kwargs)  # type: ignore[arg-type]
                 else:
-                    result = matched_route.route.action.func(**view_func_kwargs)
+                    result = await run_sync_in_thread(matched_route.route.action.func, **view_func_kwargs)  # type: ignore[arg-type]
             except RoutingError as e:
                 e.actions = {str(matched_route.route.action.id): ctx.get_actions()}
                 raise e

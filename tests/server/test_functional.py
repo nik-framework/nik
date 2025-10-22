@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import re
 
 import pytest
@@ -204,3 +205,43 @@ async def test_action_explicitly_returning_response_object(client):
     assert response.status_code == 200
     assert response.headers["content-type"] == "text/plain; charset=utf-8"
     assert response.text == "Action performed"
+
+
+async def test_non_blocking_response_occurs_before_blocking(client):
+    """
+    Strategy:
+    1) Start a blocking sync request (sleeps ~200ms).
+    2) Start a non-blocking async request before it completes.
+    3) Assert the non-blocking response arrives before the blocking one.
+    """
+
+    # Warm up
+    await client.get("/")
+
+    slow_task = asyncio.create_task(client.get("/blocking"))
+    await asyncio.sleep(0.01)  # ensure slow starts first
+    fast_task = asyncio.create_task(client.get("/"))
+
+    done, pending = await asyncio.wait({slow_task, fast_task}, return_when=asyncio.FIRST_COMPLETED)
+
+    # The first completed should be the fast request
+    assert fast_task in done
+    assert slow_task in pending
+
+    fast_resp = fast_task.result()
+    assert fast_resp.status_code == 200
+
+    # Now ensure the slow one finishes and is valid
+    slow_resp = await slow_task
+    assert slow_resp.status_code == 200
+    assert "Blocking sync view" in slow_resp.text
+
+
+async def test_sync_action_runs_in_thread_and_collects_actions(client):
+    # Make a nik action call to /blocking
+    resp = await client.post(
+        "/blocking",
+        headers={"x-nik-request": "1"},
+    )
+    assert resp.status_code == 200
+    assert "refreshView" in resp.text

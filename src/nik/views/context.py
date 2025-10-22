@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextvars import ContextVar
 from typing import Any, ClassVar, Protocol
 
 
@@ -26,7 +27,7 @@ Actions = dict[str, set[Actionable]]
 
 
 class ViewContext:
-    _current_context: ClassVar[ViewContext | None] = None
+    _current_context: ClassVar[ContextVar[ViewContext | None]] = ContextVar("nik_view_context", default=None)
 
     def __init__(self, page: Page | None = None):
         self.page = page
@@ -34,9 +35,10 @@ class ViewContext:
 
     @classmethod
     def get_current(cls) -> ViewContext:
-        if cls._current_context is None:
+        ctx = cls._current_context.get()
+        if ctx is None:
             raise RuntimeError("No active ViewContext")
-        return cls._current_context
+        return ctx
 
     def add_action(self, action: Actionable):
         if action.name not in self.actions:
@@ -61,9 +63,9 @@ class ViewContext:
         return prioritized_actions + other_actions
 
     def __enter__(self):
-        self._previous_context = ViewContext._current_context
-        ViewContext._current_context = self
+        self._token = ViewContext._current_context.set(self)
         return self
 
     def __exit__(self, *args):
-        ViewContext._current_context = self._previous_context
+        # Reset to the previous context using the token to maintain proper nesting
+        ViewContext._current_context.reset(self._token)
