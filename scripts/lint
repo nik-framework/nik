@@ -5,5 +5,6 @@ if [ -d ".venv" ]; then
   source .venv/bin/activate
 fi
 
-# Run pytest with options
-pytest $@
+
+pyright
+ruff check src tests

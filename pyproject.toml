@@ -40,7 +40,7 @@ asyncio_mode = "auto"
 
 [tool.ruff]
 src = ["src"]
-fix = true
+fix = false
 show-fixes = true
 output-format = "full"
 line-length = 120
