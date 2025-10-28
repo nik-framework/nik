@@ -63,6 +63,16 @@ In development and test environments, Nik automatically generates a `_routesgen.
     source .venv/bin/activate
     ```
 
+### Documentation
+
+The project uses `MkDocs` for generating documentation.
+
+- **Source Files**: Documentation source files and assets are located in the `docs/` directory.
+- **Development Server**: To run the documentation development server, use the following command:
+  ```bash
+  ./scripts/docs
+  ```
+
 ### Testing
 
 Tests are written using `pytest` and are located in the `tests/` directory. The test module structure mirrors the source module structure (e.g., `src/nik/somemodule.py` -> `tests/nik/test_somemodule.py`).
@@ -99,6 +109,17 @@ Key test dependencies are defined in `pyproject.toml` under `[dependency-groups.
 ## Conventions
 
 - **Type Hinting & Static Analysis**: The codebase uses type hints extensively and is statically checked with `pyright`. Ensure all new code is fully type-hinted. The configuration is in `pyproject.toml`.
-- **Code Style & Linting**: Code is formatted and linted with `ruff`. Ensure your changes adhere to the existing style. The configuration is in `pyproject.toml`.
+- **Code Style & Linting**: Code is formatted and linted with `ruff`. Before committing, run `./scripts/lint` to check for issues. Ensure your changes adhere to the existing style. The configuration is in `pyproject.toml`.
 - **Dependencies**: Project dependencies are managed in `pyproject.toml`. Use `uv` to add or update dependencies.
 - **Asynchronous Code**: The core server and routing components are asynchronous. Use `async` and `await` where appropriate, especially for I/O operations.
+
+### Quality Assurance
+
+- **Run all tests**: After making changes, ensure that all existing tests pass by running the full test suite:
+  ```bash
+  ./scripts/test
+  ```
+- **Check for errors**: Ensure there are no type or lint errors by running:
+  ```bash
+  ./scripts/lint
+  ```
