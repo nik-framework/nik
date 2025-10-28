@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Run the MkDocs development server for the documentation site.
+# This assumes dependencies are installed into .venv via `uv install`.
+
+# Activate .venv if exists
+if [ -d ".venv" ]; then
+  source .venv/bin/activate
+fi
+
+mkdocs serve

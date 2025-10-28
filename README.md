@@ -100,7 +100,21 @@ curl http://127.0.0.1:8000
 
 ## Documentation
 
-We are working hard to create comprehensive documentation for Nik. Until then, you can have a look at the `tests` folder to have an idea of how some things work.
+The documentation is built with [MkDocs](https://www.mkdocs.org/). The source files are in the `docs` directory.
+
+To run the documentation server locally, first install the dependencies:
+
+```shell
+uv install
+```
+
+Then run the server:
+
+```shell
+./scripts/docs
+```
+
+You can then view the documentation at `http://127.0.0.1:8000`.
 
 ## Road Map to V1
 
